@@ -1,7 +1,7 @@
 const vm = require('vm');
 const Module = require('module');
 const path = require('path');
-const freshy = require('freshy');
+const loader = require('./fresh-loader');
 
 const express = require('express');
 const app = express();
@@ -13,6 +13,11 @@ app.listen(3000, function() {
 });
 
 function runInVm(path) {
+  if (process.env.NODE_ENV === 'production' && process.env.BYPASS_VM) {
+    const handler = require(path);
+    return require(path);
+  }
+
   var currentdir = process.cwd();
   // the filename really didn't matter, this file doesnt even exist
   var filename = currentdir + '/routerunner.js';
@@ -28,7 +33,7 @@ function runInVm(path) {
       __filename: filename,
       __dirname: currentdir,
 
-      freshy: freshy,
+      loader: loader,
 
       req: req,
       res: res,
@@ -39,7 +44,7 @@ function runInVm(path) {
     // runnable.runInNewContext(context);
 
     // this method at least allowed the file to always be reloaded and executed immediately as we needed
-    vm.runInNewContext('(freshy.freshy("' + path + '"))(req, res, next)', context, path);
+    vm.runInNewContext('(loader("' + path + '"))(req, res, next)', context, path);
 
     // a failed experiment was to load the module directly, but wrap it in a way to control it.
     // var data = ['var module = {};', fs.readFileSync(path), ';\n'].join('');

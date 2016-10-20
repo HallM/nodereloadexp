@@ -1,11 +1,11 @@
 const vm = require('vm');
 const express = require('express');
-const freshy = require('freshy');
+const loader = require('./fresh-loader');
 const app = express();
 
 // we have to force reload by calling require each time
 app.get('/', function(req, res, next) {
-  const handler = freshy.freshy('./controller');
+  const handler = loader('./controller');
   handler(req, res, next);
 });
 

@@ -1,8 +1,8 @@
 const express = require('express');
-const freshy = require('freshy');
+const loader = require('./fresh-loader');
 const app = express.Router();
 
 // this file is reloaded anyway, so the following require will be reloaded too
-app.get('/', freshy.freshy('./controller'));
+app.get('/', loader('./controller'));
 
 module.exports = app;

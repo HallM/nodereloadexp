@@ -106,14 +106,28 @@ The following data was gathered on a late 2014 Mac Mini
 - 8 GB DDR3-1600
 - 1 TB spinning hard disk (no SSD)
 
-| Experiment        | Req/s | 50%   | 95%   | 99%   | Memory |
-| ----------------- | -----:| -----:| -----:| -----:| ------:|
-| Normal (Control)  |  2126 |  40ms |  87ms |  99ms |    tbd |
-| Hook-routes       |  1442 |  61ms | 107ms | 119ms |    tbd |
-| Hook-bootstrap    |     x |  does |   not | comp- |   lete |
-| Fresh-routes      |  1268 |  69ms | 120ms | 149ms |    tbd |
-| Fresh-bootstrap   |   965 |  99ms | 139ms | 163ms |    tbd |
-| Factory-routes    |  1652 |  51ms |  99ms | 107ms |    tbd |
-| Factory-bootstrap |  1137 |  74ms | 156ms | 195ms |    tbd |
-| VM-routes         |   638 | 150ms | 188ms | 211ms |    tbd |
-| VM-bootstrap      |   540 | 178ms | 212ms | 236ms |    tbd |
+- (NP) - non production (reload enabled)
+- (P) - production, uses bypass logic for best performance
+- (P+VM) - production, uses bypass logic, but still uses a `vm` per request
+
+| Experiment             | Req/s | 50%   | 95%   | 99%   | Memory |
+| ---------------------- | -----:| -----:| -----:| -----:| ------:|
+| Normal (Control)       |  2126 |  40ms |  87ms |  99ms |    tbd |
+| Hook-routes (NP)       |  1442 |  61ms | 107ms | 119ms |    tbd |
+| Hook-bootstrap (NP)    |     x |  does |   not | comp- |   lete |
+| Hook-routes (P)        |  1808 |  45ms |  93ms | 116ms |    tbd |
+| Hook-bootstrap (P)     |  1895 |  47ms |  84ms |  97ms |    tbd |
+| Fresh-routes (NP)      |  1268 |  69ms | 120ms | 149ms |    tbd |
+| Fresh-bootstrap (NP)   |   965 |  99ms | 139ms | 163ms |    tbd |
+| Fresh-routes (P)       |  1978 |  43ms |  87ms | 102ms |    tbd |
+| Fresh-bootstrap (P)    |  1910 |  42ms |  85ms | 113ms |    tbd |
+| Factory-routes (NP)    |  1652 |  51ms |  99ms | 107ms |    tbd |
+| Factory-bootstrap (NP) |  1137 |  74ms | 156ms | 195ms |    tbd |
+| Factory-routes (P)     |  2158 |  37ms |  83ms |  96ms |    tbd |
+| Factory-bootstrap (P)  |  2035 |  40ms |  88ms | 100ms |    tbd |
+| VM-routes (NP)         |   638 | 150ms | 188ms | 211ms |    tbd |
+| VM-bootstrap (NP)      |   540 | 178ms | 212ms | 236ms |    tbd |
+| VM-routes (P+VM)       |   775 | 123ms | 162ms | 172ms |    tbd |
+| VM-bootstrap (P+VM)    |   753 | 127ms | 158ms | 169ms |    tbd |
+| VM-routes (P)          |  2095 |  40ms |  81ms |  88ms |    tbd |
+| VM-bootstrap (P)       |  2093 |  40ms |  80ms |  98ms |    tbd |

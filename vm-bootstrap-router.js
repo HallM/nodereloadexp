@@ -1,8 +1,8 @@
 const express = require('express');
-const freshy = require('freshy');
+const loader = require('./fresh-loader');
 const app = express.Router();
 
 // vm uses the same from require-hook, so it just works
-app.get('/', freshy.freshy('./controller'));
+app.get('/', loader('./controller'));
 
 module.exports = app;
