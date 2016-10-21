@@ -34,8 +34,8 @@ the bootstrap.
 ## The approaches
 
 The experiment focuses on clearing the require cache when loading a module.
-There are four approaches that are being considered. Other approaches may
-exist and hopefully would be added for comparison.
+There are a number of approaches that are being considered. Other approaches
+may exist and hopefully would be added for comparison.
 
 ### Require hook
 
@@ -73,6 +73,29 @@ times `require.resolve` would be called. In the end, there is not a large
 difference between this method and the more simple require-hook.
 The primary benefit is the ability to allow mixing cache-using and
 cache-busting. A separate `require` could have sufficed in this instance.
+
+### Chokidar listen cache clear
+
+- listen-routes.js
+- listen-bootstrap.js > listen-bootstrap-router.js
+
+This approach uses the standard require, but adds in a `chokidar`
+listener to clear the require cache for a modified file.
+All routes must require in the controller each request which does
+add some overhead. There is no bypass for production as the `require`
+will just work as is.
+
+### Chokidar listen combined with Factory
+
+- lcache-routes.js
+- lcache-bootstrap.js > lcache-bootstrap-router.js
+
+This combines the `chokidar` listen for changes with the factory style.
+The factory style pre-caches the resolved path for require. The big
+downside to this approach is if the resolve does not return something,
+it has no opportunity to try again unless the file which requires the
+other module is modified again. There appears to be no performance difference,
+therefore the standalone `chokidar`-method has more appeal.
 
 ### vm.runInNewContext
 
@@ -125,6 +148,10 @@ The following data was gathered on a late 2014 Mac Mini
 | Factory-bootstrap (NP) |  1137 |  74ms | 156ms | 195ms |    tbd |
 | Factory-routes (P)     |  2158 |  37ms |  83ms |  96ms |    tbd |
 | Factory-bootstrap (P)  |  2035 |  40ms |  88ms | 100ms |    tbd |
+| Listen-routes (NP)     |  1838 |  47ms |  84ms |  98ms |    tbd |
+| Listen-bootstrap (NP)  |  1791 |  50ms |  85ms |  98ms |    tbd |
+| LCache-routes (NP)     |  1838 |  48ms |  86ms |  91ms |    tbd |
+| LCache-bootstrap (NP)  |  1788 |  49ms |  87ms | 105ms |    tbd |
 | VM-routes (NP)         |   638 | 150ms | 188ms | 211ms |    tbd |
 | VM-bootstrap (NP)      |   540 | 178ms | 212ms | 236ms |    tbd |
 | VM-routes (P+VM)       |   775 | 123ms | 162ms | 172ms |    tbd |
